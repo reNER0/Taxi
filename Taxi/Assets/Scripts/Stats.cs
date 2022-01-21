@@ -33,11 +33,11 @@ public class Stats : MonoBehaviour
 
     private void Update()
     {
-        _timer += Time.deltaTime;
-        if (_timer > AverageTime()) 
+        _timer -= Time.deltaTime;
+        if (_timer <= 0) 
         {
             _clientManager.CreateRandomClient();
-            _timer = 0;
+            _timer = AverageTime();
         }
     }
 
@@ -51,6 +51,6 @@ public class Stats : MonoBehaviour
         }
         averageTime /= _averageLenght;
 
-        return averageTime;
+        return averageTime / 2;
     }
 }

@@ -15,6 +15,8 @@ public class TaxiBehaviourClientDelivery : ITaxiBehaviour
         _taxi.SetDestinationPoint(_taxi._client._destinationPoint);
 
         _taxi._client.transform.parent = _taxi.transform;
+
+        _taxi._client.OnOverlayExit();
     }
 
     void ITaxiBehaviour.Exit()
@@ -24,7 +26,7 @@ public class TaxiBehaviourClientDelivery : ITaxiBehaviour
 
     void ITaxiBehaviour.Update()
     {
-        _taxi._client.OnOverlayEnter();
+        _taxi.ShowWay();
 
         if (_taxi.ReachedDestinationPoint())
         {

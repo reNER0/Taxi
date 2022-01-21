@@ -17,11 +17,13 @@ public class TaxiBehaviourClientPickUp : ITaxiBehaviour
 
     void ITaxiBehaviour.Exit()
     {
-
+        _taxi.HideWay();
     }
 
     void ITaxiBehaviour.Update()
     {
+        _taxi.ShowWay();
+
         if (_taxi.ReachedDestinationPoint()) 
         {
             _taxi.SetBehaviour(_taxi.GetBehaviour<TaxiBehaviourClientDelivery>());

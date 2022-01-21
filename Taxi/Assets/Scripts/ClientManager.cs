@@ -71,7 +71,7 @@ public class ClientManager : MonoBehaviour
     public Client GetCurrentClient() 
     {
         Client client = _clientSelection;
-        _clientSelection = null;
+        _clients.Remove(client);
         return client;
     }
 

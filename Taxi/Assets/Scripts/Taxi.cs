@@ -21,10 +21,14 @@ public class Taxi : MonoBehaviour, IClickable
 
     private float _lastTime;
 
+    private LineRenderer _renderer;
+
     public Client _client { get; private set; }
 
     private Dictionary<Type, ITaxiBehaviour> _behavioursMap;
     private ITaxiBehaviour _currentBehaviour;
+
+
 
     private void InitBehaviour() 
     {
@@ -56,6 +60,9 @@ public class Taxi : MonoBehaviour, IClickable
         SetBehaviour(GetBehaviour<TaxiBehaviourIdle>());
 
         _lastTime = Time.time;
+
+        _renderer = GetComponent<LineRenderer>();
+        _renderer.enabled = false;
     }
 
     private void Update()
@@ -80,6 +87,20 @@ public class Taxi : MonoBehaviour, IClickable
                 transform.position = Vector3.MoveTowards(transform.position, _currentPoint._position, _speed * Time.deltaTime * (1 - Traffic.GetTrafficAtPoint(transform.position)));
             }
         }
+    }
+
+    public void ShowWay() 
+    {
+        Vector3[] positions = _map.GetShortestPath(transform.position, _currentPoint._position, _destination._position, _lastPoints);
+        _renderer.positionCount = positions.Length;
+        _renderer.SetPositions(positions);
+
+        _renderer.enabled = true;
+    }
+
+    public void HideWay() 
+    {
+        _renderer.enabled = false;
     }
 
     public bool ReachedNextPoint() => transform.position == _currentPoint._position;

@@ -175,41 +175,44 @@ public class Map : MonoBehaviour
         return false;
     }
 
-    /*
-    public void DrawShortestPath(Point fromPoint, Point destination, Color color, out float cost)
+    public Vector3[] GetShortestPath(Vector3 fromPosition, Vector3 fromPoint, Vector3 destination, List<Point> excludePoints)
     {
-        cost = 0;
+        Point lastPoint = GetClosestPoint(fromPoint);
 
-        Point lastPoint = fromPoint;
-        List<Point> lastData = new List<Point>(0);
-        for (int i = 0; i < 2; i++)
+        List<Point> excludeP = new List<Point>();
+
+        for (int i = 0; i < excludePoints.Count; i++) 
         {
-            lastData.Add(_lastData[i]);
+            excludeP.Add(excludePoints[i]);
         }
 
-        Debug.DrawLine(transform.position, lastPoint._position, color);
+        List<Vector3> path = new List<Vector3>();
 
-        if (lastPoint != destination)
+        path.Add(fromPosition);
+        path.Add(fromPoint);
+
+        if (lastPoint._position != destination)
         {
             for (int i = 0; i < 100; i++)
             {
-                lastData.Add(lastPoint);
-                lastData.RemoveAt(0);
+                excludeP.Add(lastPoint);
+                
+                excludeP.RemoveAt(0);
 
-                Point nextPoint = GetNextPoint(lastPoint, lastData);
+                Point nextPoint = GetNextPoint(lastPoint._position, destination, excludeP);
 
-                Debug.DrawLine(lastPoint._position, nextPoint._position, color);
+                path.Add(nextPoint._position);
 
-                if (nextPoint == destination)
+                if (nextPoint._position == destination)
                 {
+
                     break;
                 }
-
-                cost += Vector3.Distance(lastPoint._position, nextPoint._position);
 
                 lastPoint = nextPoint;
             }
         }
+
+        return path.ToArray();
     }
-    */
 }

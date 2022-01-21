@@ -948,7 +948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clientManager: {fileID: 1433866541}
   _averageLenght: 3
-  _defaultTime: 3
+  _defaultTime: 10
 --- !u!4 &986524853
 Transform:
   m_ObjectHideFlags: 0
