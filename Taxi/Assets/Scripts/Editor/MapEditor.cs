@@ -17,9 +17,11 @@ public class MapEditor : Editor
         _targetComponent = (Map)target;
         _event = Event.current;
 
+        Handles.color = Color.red;
+
         int clickedID;
 
-        switch (_targetComponent._editType)
+        switch (_targetComponent.editType)
         {
             case EditType.AddingPoints:
 
@@ -44,7 +46,7 @@ public class MapEditor : Editor
 
                 if (clickedID != -1) 
                 {
-                    _targetComponent.RemovePoint(_targetComponent._points[clickedID]);
+                    _targetComponent.RemovePoint(_targetComponent.points[clickedID]);
 
                     EditorUtility.SetDirty(_targetComponent);
                 }
@@ -55,9 +57,9 @@ public class MapEditor : Editor
 
                 _selection = -1;
 
-                for (int i = 0; i < _targetComponent._points.Count; i++)
+                for (int i = 0; i < _targetComponent.points.Count; i++)
                 {
-                    _targetComponent._points[i]._position = Handles.PositionHandle(_targetComponent._points[i]._position, Quaternion.identity);
+                    _targetComponent.points[i].position = Handles.PositionHandle(_targetComponent.points[i].position, Quaternion.identity);
                 }
 
                 break;
@@ -74,7 +76,7 @@ public class MapEditor : Editor
                     }
                     else 
                     {
-                        _targetComponent.AddEdge(_targetComponent._points[_selection], _targetComponent._points[clickedID]);
+                        _targetComponent.AddEdge(_targetComponent.points[_selection], _targetComponent.points[clickedID]);
                         _selection = -1;
                     }
 
@@ -95,7 +97,7 @@ public class MapEditor : Editor
                     }
                     else
                     {
-                        _targetComponent.RemoveEdge(_targetComponent._points[_selection], _targetComponent._points[clickedID]);
+                        _targetComponent.RemoveEdge(_targetComponent.points[_selection], _targetComponent.points[clickedID]);
                         _selection = -1;
 
                         EditorUtility.SetDirty(_targetComponent);
@@ -114,10 +116,10 @@ public class MapEditor : Editor
 
                     if (_selection != -1)
                     {
-                        _targetComponent.AddEdge(_targetComponent._points[_selection], _targetComponent._points[_targetComponent._points.Count - 1]);
+                        _targetComponent.AddEdge(_targetComponent.points[_selection], _targetComponent.points[_targetComponent.points.Count - 1]);
                     }
                     
-                    _selection = _targetComponent._points.Count - 1;
+                    _selection = _targetComponent.points.Count - 1;
 
                     EditorUtility.SetDirty(_targetComponent);
                 }
@@ -166,14 +168,14 @@ public class MapEditor : Editor
 
     private int ProcessButtons() 
     {
-        for (int i = 0; i < _targetComponent._points.Count; i++)
+        for (int i = 0; i < _targetComponent.points.Count; i++)
         {
-            float size = 0.1f;
+            float size = 0.05f;
 
             if (i == _selection)
                 size *= 2;
 
-            if (Handles.Button(_targetComponent._points[i]._position, SceneView.lastActiveSceneView.rotation, size, size, Handles.CircleHandleCap))
+            if (Handles.Button(_targetComponent.points[i].position, SceneView.lastActiveSceneView.rotation, size, size, Handles.CircleHandleCap))
             {
                 if (i == _selection)
                 {
@@ -192,9 +194,9 @@ public class MapEditor : Editor
 
     private void DrawEdges()
     {
-        foreach (Edge edge in _targetComponent._edges)
+        foreach (Edge edge in _targetComponent.edges)
         {
-            Debug.DrawLine(edge.Point1._position, edge.Point2._position, Color.black);
+            Debug.DrawLine(edge.point1.position, edge.point2.position, Color.black);
         }
     }
 }

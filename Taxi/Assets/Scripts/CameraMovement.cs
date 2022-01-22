@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -8,12 +6,9 @@ public class CameraMovement : MonoBehaviour
 
     private Vector3 _position;
 
-    private Camera _camera;
-
     private void Start()
     {
         _position = transform.position;
-        _camera = GetComponent<Camera>();
     }
 
     private void Update()

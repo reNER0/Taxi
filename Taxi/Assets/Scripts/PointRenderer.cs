@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PointRenderer : MonoBehaviour
 {
@@ -8,6 +6,7 @@ public class PointRenderer : MonoBehaviour
     [SerializeField] private Color _fullRoadColor;
 
     private SpriteRenderer _renderer;
+
 
     private void Awake()
     {
@@ -18,6 +17,7 @@ public class PointRenderer : MonoBehaviour
     {
         SetTrafficInfo(Traffic.GetTrafficAtPoint(transform.position));
     }
+
 
     public void AssignPosition(Vector3 pos)
     {

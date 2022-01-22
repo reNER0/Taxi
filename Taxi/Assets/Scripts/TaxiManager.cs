@@ -1,38 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TaxiManager : MonoBehaviour
 {
     [SerializeField] private Map _map;
-    [SerializeField] private Stats _stats;
     [SerializeField] private ClientManager _clientManager;
     [SerializeField] private Taxi _taxiPrefab;
+    [SerializeField] private int _taxiCost;
+
+    public int TaxiCost => _taxiCost;
 
     private List<Taxi> _taxiCars = new List<Taxi>(0);
 
+
     public void BuyCar() 
     {
-        Taxi newTaxi = Instantiate(_taxiPrefab, transform);
-        newTaxi.transform.position = _map._points[Random.Range(0, _map._points.Count)]._position;
-        _taxiCars.Add(newTaxi);
-    }
-
-    private void Update()
-    {
-        if (_clientManager.LookingForTaxi()) 
+        if (MoneyManager.Instance.CanSpendMoney(_taxiCost)) 
         {
+            MoneyManager.Instance.SpendMoney(_taxiCost);
 
+            Taxi newTaxi = Instantiate(_taxiPrefab, transform);
+            newTaxi.transform.position = _map.points[Random.Range(0, _map.points.Count)].position;
+            _taxiCars.Add(newTaxi);
         }
     }
+
 
     public Client PickUpClient() 
     {
         return _clientManager.GetCurrentClient();
-    }
-
-    public void SetLastTime(float time) 
-    {
-        _stats.SetLastTime(time);
     }
 }

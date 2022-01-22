@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Traffic : MonoBehaviour
+public class Traffic
 {
     public static float GetTrafficAtPoint(Vector3 point) 
     {
-        float offset = Time.time / 5;
+        float _trafficMoveSpeed = 0.1f;
+
+        float offset = Time.time * _trafficMoveSpeed;
+
         return Mathf.PerlinNoise(point.x + offset,point.z + offset);
     }
 }

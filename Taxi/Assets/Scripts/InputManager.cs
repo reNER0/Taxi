@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
     private Camera _camera;
 
-    private IClickable _lastClickable;
+    private List<IClickable> _lastClickablesList = new List<IClickable>();
 
     private void Start()
     {
@@ -15,34 +14,45 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hit))
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition), 10f);
+
+        List<IClickable> currentClickablesList = new List<IClickable>();
+
+        foreach (RaycastHit hit in hits)
         {
-            IClickable click = hit.collider.GetComponent<IClickable>();
+            currentClickablesList.AddRange(hit.collider.GetComponentsInChildren<IClickable>());
+        }
 
-            if (click != null)
+        foreach (IClickable click in currentClickablesList)
+        {
+            if (!_lastClickablesList.Contains(click))
             {
-                if (click != _lastClickable)
-                {
-                    click.OnOverlayEnter();
-                }
-
-                if (isUseButtonPressed())
-                {
-                    click.OnClick();
-                }
+                click.OnOverlayEnter();
+                _lastClickablesList.Add(click);
             }
             else 
             {
-                if (_lastClickable != null) 
-                {
-                    _lastClickable.OnOverlayExit();
-                }
+                click.OnOverlayStay();
             }
 
-            _lastClickable = click;
+            if (isClicked())
+            {
+                click.OnClick();
+            }
+        }
+
+        for (int i = 0; i < _lastClickablesList.Count; i++)
+        {
+            if (!currentClickablesList.Contains(_lastClickablesList[i]))
+            {
+                _lastClickablesList[i].OnOverlayExit();
+                _lastClickablesList.Remove(_lastClickablesList[i]);
+                i--;
+            }
         }
     }
+
 
     public static Vector2 MouseInput()
     {
@@ -54,13 +64,8 @@ public class InputManager : MonoBehaviour
         return Input.GetMouseButton(1);
     }
 
-    public static bool isUseButtonPressed()
+    public static bool isClicked()
     {
         return Input.GetMouseButtonDown(0);
-    }
-
-    public static bool isUpdateButtonPressed()
-    {
-        return Input.GetKeyDown(KeyCode.F);
     }
 }

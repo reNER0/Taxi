@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EdgeRenderer : MonoBehaviour
 {
@@ -10,6 +8,7 @@ public class EdgeRenderer : MonoBehaviour
     private LineRenderer _renderer;
     private Edge _edge;
 
+
     private void Awake()
     {
         _renderer = GetComponent<LineRenderer>();
@@ -17,15 +16,16 @@ public class EdgeRenderer : MonoBehaviour
 
     private void Update()
     {
-        SetTrafficInfo(Traffic.GetTrafficAtPoint(_edge.Point1._position), Traffic.GetTrafficAtPoint(_edge.Point2._position));
+        SetTrafficInfo(Traffic.GetTrafficAtPoint(_edge.point1.position), Traffic.GetTrafficAtPoint(_edge.point2.position));
     }
+
 
     public void AssignEdge(Edge edge)
     {
         _edge = edge;
 
-        _renderer.SetPosition(0, _edge.Point1._position);
-        _renderer.SetPosition(1, _edge.Point2._position);
+        _renderer.SetPosition(0, _edge.point1.position);
+        _renderer.SetPosition(1, _edge.point2.position);
     }
 
     public void SetTrafficInfo(float traffic1, float traffic2)
@@ -36,4 +36,5 @@ public class EdgeRenderer : MonoBehaviour
         _renderer.startColor = startColor;
         _renderer.endColor = endColor;
     }
+
 }

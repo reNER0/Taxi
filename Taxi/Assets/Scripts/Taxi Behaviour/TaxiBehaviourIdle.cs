@@ -1,0 +1,42 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TaxiBehaviourIdle : ITaxiBehaviour
+{
+    private Taxi _taxi;
+
+    public TaxiBehaviourIdle(Taxi taxi) 
+    {
+        _taxi = taxi;
+    }
+    void ITaxiBehaviour.Enter()
+    {
+        
+    }
+
+    void ITaxiBehaviour.Exit()
+    {
+
+    }
+
+    void ITaxiBehaviour.Update()
+    {
+        if (_taxi._client)
+        {
+            _taxi.SetBehaviour(_taxi.GetBehaviour<TaxiBehaviourClientPickUp>());
+        }/*
+        else 
+        {
+            ClientManager clientManager = Object.FindObjectOfType<ClientManager>();
+            if (clientManager) 
+            {
+                if (clientManager._clients.Count > 0) 
+                {
+                    clientManager._clients[0].OnClick();
+                    _taxi.OnClick();
+                }
+            }
+        }*/
+    }
+}

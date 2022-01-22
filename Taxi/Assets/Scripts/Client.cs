@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Client : MonoBehaviour, IClickable
 {
+    [SerializeField] private Transform _destinationMarker;
+
     public Point _startPoint;
     public Point _destinationPoint;
 
@@ -11,23 +13,63 @@ public class Client : MonoBehaviour, IClickable
 
     private LineRenderer _renderer;
 
-    private void Start()
+    private void Awake()
     {
         _clientManager = GetComponentInParent<ClientManager>();
 
         _renderer = GetComponent<LineRenderer>();
-        _renderer.enabled = false;
+
+        HideWay();
+    }
+
+    public float GetReward() 
+    {
+        float reward = Vector3.Distance(_startPoint.position, _destinationPoint.position);
+
+        return reward;
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
+    }
+
+    public void ShowWay() 
+    {
+        UpdateWay();
+
+        _destinationMarker.gameObject.SetActive(true);
+        _renderer.enabled = true;
+    }
+    public void HideWay()
+    {
+        if (_destinationMarker)
+        {
+            _destinationMarker.gameObject.SetActive(false);
+            _renderer.enabled = false;
+        }
+    }
+
+    public void UpdateWay()
+    {
+        _renderer.SetPositions(new Vector3[] { transform.position, _destinationPoint.position });
+
+        _destinationMarker.transform.position = _destinationPoint.position;
     }
 
     public void OnOverlayEnter()
     {
-        _renderer.SetPositions(new Vector3[] { transform.position, _destinationPoint._position });
-        _renderer.enabled = true;
+        ShowWay();
     }
 
     public void OnOverlayExit()
     {
-        _renderer.enabled = false;
+        HideWay();
+    }
+
+    public void OnOverlayStay()
+    {
+        UpdateWay();
     }
 
     public void OnClick()

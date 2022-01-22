@@ -1,36 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
     [SerializeField] private ClientManager _clientManager;
-    [SerializeField] private int _averageLenght = 10;
     [SerializeField] private float _defaultTime = 30;
+    [SerializeField] private int _averageMathLenght = 10;
+
+    public static Stats Instance;
 
     private List<float> _averageTimesList;
     private float _timer;
 
-    private void Start()
+
+    private void Awake()
     {
+        Instance = this;
+
         InitAverageTimesList();
     }
-
-    private void InitAverageTimesList() 
-    {
-        _averageTimesList = new List<float>(0);
-        while (_averageTimesList.Count < _averageLenght) 
-        {
-            _averageTimesList.Add(_defaultTime);
-        }
-    }
-
-    public void SetLastTime(float time) 
-    {
-        _averageTimesList.RemoveAt(0);
-        _averageTimesList.Add(time);
-    }
-
+    
     private void Update()
     {
         _timer -= Time.deltaTime;
@@ -41,6 +30,24 @@ public class Stats : MonoBehaviour
         }
     }
 
+
+    private void InitAverageTimesList() 
+    {
+        _averageTimesList = new List<float>(0);
+        while (_averageTimesList.Count < _averageMathLenght) 
+        {
+            _averageTimesList.Add(_defaultTime);
+        }
+    }
+
+
+    public void SetLastTime(float time) 
+    {
+        _averageTimesList.RemoveAt(0);
+        _averageTimesList.Add(time);
+    }
+
+
     private float AverageTime() 
     {
         float averageTime = 0;
@@ -49,7 +56,7 @@ public class Stats : MonoBehaviour
         {
             averageTime += time;
         }
-        averageTime /= _averageLenght;
+        averageTime /= _averageMathLenght;
 
         return averageTime / 2;
     }

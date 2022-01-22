@@ -24,13 +24,13 @@ public class ClientManager : MonoBehaviour
             employedPoints.Add(client._startPoint);
         }
 
-        int recursionLimit = _map._points.Count;
+        int recursionLimit = _map.points.Count;
         
         Point randomPoint = new Point(Vector3.zero);
 
         for (int i = 0; i < recursionLimit; i++) 
         {
-            randomPoint = _map._points[UnityEngine.Random.Range(0, recursionLimit)];
+            randomPoint = _map.points[UnityEngine.Random.Range(0, recursionLimit)];
 
             if (!employedPoints.Contains(randomPoint)) 
             {
@@ -40,13 +40,13 @@ public class ClientManager : MonoBehaviour
 
                 for (int j = 0; j < recursionLimit; j++)
                 {
-                    randomPoint = _map._points[UnityEngine.Random.Range(0, recursionLimit)];
+                    randomPoint = _map.points[UnityEngine.Random.Range(0, recursionLimit)];
 
                     if (!employedPoints.Contains(randomPoint))
                     {
                         newClient._destinationPoint = randomPoint;
 
-                        newClient.transform.position = newClient._startPoint._position;
+                        newClient.transform.position = newClient._startPoint.position;
 
                         _clients.Add(newClient);
 
@@ -75,8 +75,4 @@ public class ClientManager : MonoBehaviour
         return client;
     }
 
-    private void Update()
-    {
-        
-    }
 }
