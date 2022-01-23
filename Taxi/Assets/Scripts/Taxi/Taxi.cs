@@ -8,8 +8,6 @@ public class Taxi : MonoBehaviour, IClickable
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _clientReward;
-    [SerializeField] private float _fuelBurningSpeed;
-    [SerializeField] private int _fuelCapacity;
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private int _drivenRoadMemory = 3;
     [SerializeField] private Client _clientPrefab;
@@ -26,24 +24,13 @@ public class Taxi : MonoBehaviour, IClickable
 
     private float _lastTime;
 
-    private float _fuelQuantity;
-
     private LineRenderer _renderer;
 
     public Client _client { get; private set; }
 
-    private Dictionary<Type, ITaxiBehaviour> _behavioursMap;
-    private ITaxiBehaviour _currentBehaviour;
+    [SerializeField] private TaxiFuelTank _tank = new TaxiFuelTank();
 
-
-    private void InitBehaviour() 
-    {
-        _behavioursMap = new Dictionary<Type, ITaxiBehaviour>();
-
-        _behavioursMap[typeof(TaxiBehaviourIdle)] = new TaxiBehaviourIdle(this);
-        _behavioursMap[typeof(TaxiBehaviourClientPickUp)] = new TaxiBehaviourClientPickUp(this);
-        _behavioursMap[typeof(TaxiBehaviourClientDelivery)] = new TaxiBehaviourClientDelivery(this);
-    }
+    public TaxiFuelTank Tank => _tank;
 
     public void InitLastPoints() 
     {
@@ -65,10 +52,6 @@ public class Taxi : MonoBehaviour, IClickable
         _destination = _currentPoint;
 
         InitLastPoints();
-
-        InitBehaviour();
-
-        SetBehaviour(GetBehaviour<TaxiBehaviourIdle>());
 
         _lastTime = Time.time;
 
@@ -97,12 +80,6 @@ public class Taxi : MonoBehaviour, IClickable
             }
         }
 
-
-        if (_currentBehaviour != null) 
-        {
-            _currentBehaviour.Update();
-        }
-
     }
 
     public void ShowWay() 
@@ -128,25 +105,6 @@ public class Taxi : MonoBehaviour, IClickable
         _destination = _map.GetClosestPoint(point.position);
     }
 
-    public void BurnFuel() 
-    {
-        _fuelQuantity -= Time.deltaTime * _fuelBurningSpeed;
-        if (_fuelQuantity <= 0) 
-        {
-            if (MoneyManager.Instance.CanSpendMoney(_fuelCapacity)) 
-            {
-                MoneyManager.Instance.SpendMoney(_fuelCapacity);
-                _fuelQuantity = _fuelCapacity;
-            }
-        }
-
-
-    }
-
-    public float FuelPercent() 
-    {
-        return _fuelQuantity / _fuelCapacity;
-    }
 
     public void EndClientDelivery() 
     {
@@ -166,22 +124,5 @@ public class Taxi : MonoBehaviour, IClickable
     public void OnClick()
     {
         _client = _taxiManager.PickUpClient();
-    }
-
-    public void SetBehaviour(ITaxiBehaviour behaviour) 
-    {
-        if (_currentBehaviour != null) 
-        {
-            _currentBehaviour.Exit();
-        }
-
-        _currentBehaviour = behaviour;
-        _currentBehaviour.Enter();
-    }
-
-    public ITaxiBehaviour GetBehaviour<T>() where T : ITaxiBehaviour 
-    {
-        var type = typeof(T);
-        return _behavioursMap[type];
     }
 }

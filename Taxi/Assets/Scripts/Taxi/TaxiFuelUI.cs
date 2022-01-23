@@ -51,7 +51,7 @@ public class TaxiFuelUI : MonoBehaviour, IClickable
     private float FillAmount() 
     {
         float delta = _maxFillAmount - _minFillAmount;
-        float fillAmount = _minFillAmount + delta * _taxi.FuelPercent();
+        float fillAmount = _minFillAmount + delta * _taxi.Tank.FuelPercent();
         return fillAmount;
     }
 

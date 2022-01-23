@@ -4,38 +4,38 @@ using UnityEngine;
 
 public class TaxiBehaviourClientDelivery : ITaxiBehaviour
 {
-    private Taxi _taxi;
+    private TaxiBehaviourController _controller;
 
-    public TaxiBehaviourClientDelivery(Taxi taxi)
+    public TaxiBehaviourClientDelivery(TaxiBehaviourController controller)
     {
-        _taxi = taxi;
+        _controller = controller;
     }
     void ITaxiBehaviour.Enter()
     {
-        _taxi.SetDestinationPoint(_taxi._client._destinationPoint);
+        _controller.taxi.SetDestinationPoint(_controller.taxi._client._destinationPoint);
 
-        _taxi._client.transform.parent = _taxi.transform;
+        _controller.taxi._client.transform.parent = _controller.transform;
     }
 
     void ITaxiBehaviour.Exit()
     {
-        _taxi.EndClientDelivery();
-        _taxi.InitLastPoints();
+        _controller.taxi.EndClientDelivery();
+        _controller.taxi.InitLastPoints();
 
-        int reward = Mathf.RoundToInt(_taxi._client.GetReward() * _taxi.ClientReward);
+        int reward = Mathf.RoundToInt(_controller.taxi._client.GetReward() * _controller.taxi.ClientReward);
 
         MoneyManager.Instance.AddMoney(reward);
     }
 
     void ITaxiBehaviour.Update()
     {
-        _taxi.BurnFuel();
-        _taxi.ShowWay();
-        _taxi._client.ShowWay();
+        _controller.taxi.Tank.BurnFuel();
+        _controller.taxi.ShowWay();
+        _controller.taxi._client.ShowWay();
 
-        if (_taxi.ReachedDestinationPoint())
+        if (_controller.taxi.ReachedDestinationPoint())
         {
-            _taxi.SetBehaviour(_taxi.GetBehaviour<TaxiBehaviourIdle>());
+            _controller.SetBehaviour(_controller.GetBehaviour<TaxiBehaviourIdle>());
         }
     }
 }

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class TaxiBehaviourIdle : ITaxiBehaviour
 {
-    private Taxi _taxi;
+    private TaxiBehaviourController _controller;
 
-    public TaxiBehaviourIdle(Taxi taxi) 
+    public TaxiBehaviourIdle(TaxiBehaviourController controller) 
     {
-        _taxi = taxi;
+        _controller = controller;
     }
+
+
     void ITaxiBehaviour.Enter()
     {
         
@@ -22,21 +24,9 @@ public class TaxiBehaviourIdle : ITaxiBehaviour
 
     void ITaxiBehaviour.Update()
     {
-        if (_taxi._client)
+        if (_controller.taxi._client)
         {
-            _taxi.SetBehaviour(_taxi.GetBehaviour<TaxiBehaviourClientPickUp>());
-        }/*
-        else 
-        {
-            ClientManager clientManager = Object.FindObjectOfType<ClientManager>();
-            if (clientManager) 
-            {
-                if (clientManager._clients.Count > 0) 
-                {
-                    clientManager._clients[0].OnClick();
-                    _taxi.OnClick();
-                }
-            }
-        }*/
+            _controller.SetBehaviour(_controller.GetBehaviour<TaxiBehaviourClientPickUp>());
+        }
     }
 }
