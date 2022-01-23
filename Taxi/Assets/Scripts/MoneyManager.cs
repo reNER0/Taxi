@@ -21,6 +21,24 @@ public class MoneyManager : MonoBehaviour
     public static MoneyManager Instance;
 
 
+    public delegate void MoneyHandler(int value);
+
+    public event MoneyHandler OnMoneyValueChanged;
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        Money = 1000;
+
+        OnMoneyValueChanged?.Invoke(Money);
+    }
+    
+
     public bool CanSpendMoney(int money) => money <= Money;
 
 
@@ -38,21 +56,4 @@ public class MoneyManager : MonoBehaviour
         OnMoneyValueChanged.Invoke(Money);
     }
 
-
-    public delegate void MoneyHandler(int value);
-
-    public event MoneyHandler OnMoneyValueChanged;
-
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-
-    private void Start()
-    {
-        Money = 1000;
-
-        OnMoneyValueChanged?.Invoke(Money);
-    }
 }

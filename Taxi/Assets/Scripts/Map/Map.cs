@@ -17,89 +17,17 @@ public class Map : MonoBehaviour
     [SerializeField] private EdgeRenderer _edgePrefab;
     [SerializeField] private EditType _editType;
 
-    public EditType editType => _editType;
-
     [HideInInspector] public List<Point> points = new List<Point>(0);
     [HideInInspector] public List<Edge> edges = new List<Edge>(0);
 
-
-    public void AddPoint(Vector3 pos)
-    {
-        Point newPoint = new Point(pos);
-        points.Add(newPoint);
-    }
-
-    public void AddEdge(Point point1, Point point2) 
-    {
-        foreach (Edge edge in edges) 
-        {
-            if (
-                (edge.point1 == point1 && edge.point2 == point2)
-                ||
-                (edge.point1 == point2 && edge.point2 == point1)
-                )
-            {
-                return;
-            }
-        }
-
-        edges.Add(new Edge(point1, point2));
-    }
-
-    public void RemovePoint(Point point) 
-    {
-        for (int i = 0; i < edges.Count; i++)
-        {
-            if (new Vector3(Mathf.Round(edges[i].point1.position.x*10)/10, Mathf.Round(edges[i].point1.position.y * 10) / 10, Mathf.Round(edges[i].point1.position.z * 10) / 10) 
-                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10)
-                || new Vector3(Mathf.Round(edges[i].point2.position.x * 10) / 10, Mathf.Round(edges[i].point2.position.y * 10) / 100, Mathf.Round(edges[i].point2.position.z * 10) / 10)
-                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10))
-            {
-                edges.RemoveAt(i);
-                i--;
-            }
-        }
-
-        points.Remove(point);
-    }
-
-    public void RemoveEdge(Point point1, Point point2)
-    {
-        foreach (Edge edge in edges)
-        {
-            if (
-                (edge.point1 == point1 && edge.point2 == point2)
-                ||
-                (edge.point1 == point2 && edge.point2 == point1)
-                )
-            {
-                edges.Remove(edge);
-                break;
-            }
-        }
-    }
-
-    public void DrawEdges() 
-    {
-        for(int i = 0; i < edges.Count; i++) 
-        {
-            EdgeRenderer newRenderer = Instantiate(_edgePrefab, transform);
-            newRenderer.AssignEdge(edges[i]);
-        }
-    }
-
-    public void DrawPoints()
-    {
-        for (int i = 0; i < points.Count; i++)
-        {
-            PointRenderer newRenderer = Instantiate(_pointPrefab, transform);
-            newRenderer.AssignPosition(points[i].position);
-        }
-    }
+    public EditType editType => _editType;
+    public static Map Instance;
 
 
     private void Start()
     {
+        Instance = this;
+
         DrawEdges();
         DrawPoints();
     }
@@ -244,6 +172,81 @@ public class Map : MonoBehaviour
         }
 
         return false;
+    }
+
+
+    public void AddPoint(Vector3 pos)
+    {
+        Point newPoint = new Point(pos);
+        points.Add(newPoint);
+    }
+
+    public void AddEdge(Point point1, Point point2) 
+    {
+        foreach (Edge edge in edges) 
+        {
+            if (
+                (edge.point1 == point1 && edge.point2 == point2)
+                ||
+                (edge.point1 == point2 && edge.point2 == point1)
+                )
+            {
+                return;
+            }
+        }
+
+        edges.Add(new Edge(point1, point2));
+    }
+
+    public void RemovePoint(Point point) 
+    {
+        for (int i = 0; i < edges.Count; i++)
+        {
+            if (new Vector3(Mathf.Round(edges[i].point1.position.x*10)/10, Mathf.Round(edges[i].point1.position.y * 10) / 10, Mathf.Round(edges[i].point1.position.z * 10) / 10) 
+                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10)
+                || new Vector3(Mathf.Round(edges[i].point2.position.x * 10) / 10, Mathf.Round(edges[i].point2.position.y * 10) / 100, Mathf.Round(edges[i].point2.position.z * 10) / 10)
+                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10))
+            {
+                edges.RemoveAt(i);
+                i--;
+            }
+        }
+
+        points.Remove(point);
+    }
+
+    public void RemoveEdge(Point point1, Point point2)
+    {
+        foreach (Edge edge in edges)
+        {
+            if (
+                (edge.point1 == point1 && edge.point2 == point2)
+                ||
+                (edge.point1 == point2 && edge.point2 == point1)
+                )
+            {
+                edges.Remove(edge);
+                break;
+            }
+        }
+    }
+
+    public void DrawEdges() 
+    {
+        for(int i = 0; i < edges.Count; i++) 
+        {
+            EdgeRenderer newRenderer = Instantiate(_edgePrefab, transform);
+            newRenderer.AssignEdge(edges[i]);
+        }
+    }
+
+    public void DrawPoints()
+    {
+        for (int i = 0; i < points.Count; i++)
+        {
+            PointRenderer newRenderer = Instantiate(_pointPrefab, transform);
+            newRenderer.AssignPosition(points[i].position);
+        }
     }
 
 }

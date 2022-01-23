@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5189118591916362496}
   - component: {fileID: 7535682079403017032}
   - component: {fileID: 114350070855315692}
+  - component: {fileID: 3808074770076815055}
   m_Layer: 0
   m_Name: Taxi
   m_TagString: Untagged
@@ -51,12 +52,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 1
   _clientReward: 10
-  _fuelBurningSpeed: 1
-  _fuelCapacity: 10
   _rotationSpeed: 15
   _drivenRoadMemory: 50
   _clientPrefab: {fileID: 358292220025049816, guid: e940ab10671edac4aa8776c75464e232,
     type: 3}
+  _tank:
+    _fuelBurningSpeed: 1
+    _fuelCapacity: 10
 --- !u!135 &135630732408143924
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -192,7 +194,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5fc3f7b759132428bc2b0ad4d5ba83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  taxi: {fileID: 0}
+--- !u!114 &3808074770076815055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54065021000549846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77897e1bc3c6c14ba8ee7218148e535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4029561077115961051
 GameObject:
   m_ObjectHideFlags: 0

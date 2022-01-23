@@ -1,38 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Stats : MonoBehaviour
+[Serializable]
+public class Stats
 {
-    [SerializeField] private ClientManager _clientManager;
     [SerializeField] private float _defaultTime = 30;
     [SerializeField] private int _averageMathLenght = 10;
 
+    private List<float> _averageTimesList;
+
     public static Stats Instance;
 
-    private List<float> _averageTimesList;
-    private float _timer;
 
-
-    private void Awake()
+    public void Init() 
     {
         Instance = this;
 
-        InitAverageTimesList();
-    }
-    
-    private void Update()
-    {
-        _timer -= Time.deltaTime;
-        if (_timer <= 0) 
-        {
-            _clientManager.CreateRandomClient();
-            _timer = AverageTime();
-        }
-    }
-
-
-    private void InitAverageTimesList() 
-    {
         _averageTimesList = new List<float>(0);
         while (_averageTimesList.Count < _averageMathLenght) 
         {
@@ -48,7 +32,7 @@ public class Stats : MonoBehaviour
     }
 
 
-    private float AverageTime() 
+    public float AverageTime() 
     {
         float averageTime = 0;
 

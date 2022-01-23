@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     {
         _moneyManager.OnMoneyValueChanged += OnMoneyValueChanged;
     }
+
     private void OnDisable()
     {
         _moneyManager.OnMoneyValueChanged -= OnMoneyValueChanged;
@@ -22,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void OnMoneyValueChanged(int money) 
     {
-        _buyTaxiButton.interactable = money >= _taxiManager.TaxiCost;
+        _buyTaxiButton.interactable = money >= _taxiManager.taxiCost;
 
         _moneyText.text = money + "$";
     }

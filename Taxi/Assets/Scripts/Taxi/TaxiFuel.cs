@@ -12,6 +12,12 @@ public class TaxiFuelTank
     private float _fuelQuantity;
 
 
+    public float FuelPercent()
+    {
+        return _fuelQuantity / _fuelCapacity;
+    }
+
+
     public void BurnFuel()
     {
         _fuelQuantity -= Time.deltaTime * _fuelBurningSpeed;
@@ -25,8 +31,4 @@ public class TaxiFuelTank
         }
     }
 
-    public float FuelPercent()
-    {
-        return _fuelQuantity / _fuelCapacity;
-    }
 }

@@ -8,9 +8,9 @@ public class TaxiManager : MonoBehaviour
     [SerializeField] private Taxi _taxiPrefab;
     [SerializeField] private int _taxiCost;
 
-    public int TaxiCost => _taxiCost;
-
     private List<Taxi> _taxiCars = new List<Taxi>(0);
+
+    public int taxiCost => _taxiCost;
 
 
     public void BuyCar() 
@@ -23,11 +23,5 @@ public class TaxiManager : MonoBehaviour
             newTaxi.transform.position = _map.points[Random.Range(0, _map.points.Count)].position;
             _taxiCars.Add(newTaxi);
         }
-    }
-
-
-    public Client PickUpClient() 
-    {
-        return _clientManager.GetCurrentClient();
     }
 }

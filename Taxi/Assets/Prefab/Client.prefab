@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 358292220025049816}
   - component: {fileID: 135666797236254740}
   - component: {fileID: 6588007933358710798}
+  - component: {fileID: 114946545925327990}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -47,11 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83eedcb5e1d0cd4890388662aa09434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _destinationMarker: {fileID: 6985910463722731095}
-  _startPoint:
-    _position: {x: 0, y: 0, z: 0}
-  _destinationPoint:
-    _position: {x: 0, y: 0, z: 0}
+  startPoint:
+    position: {x: 0, y: 0, z: 0}
+  destinationPoint:
+    position: {x: 0, y: 0, z: 0}
 --- !u!135 &135666797236254740
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -160,6 +160,19 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &114946545925327990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3602566199289376693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77897e1bc3c6c14ba8ee7218148e535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _destinationMarker: {fileID: 6985910463722731095}
 --- !u!1 &4369550459355501373
 GameObject:
   m_ObjectHideFlags: 0

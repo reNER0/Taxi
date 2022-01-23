@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
 
     private Vector3 _position;
 
+
     private void Start()
     {
         _position = transform.position;
@@ -16,13 +17,14 @@ public class CameraMovement : MonoBehaviour
         MoveCamera();
     }
 
+
     private void MoveCamera()
     {
-        if (InputManager.isMoveButtonPressed())
+        if (CustomInput.isMoveButtonPressed())
         {
             Vector3 direction = 
-                (transform.forward * InputManager.MouseInput().y 
-                + transform.right * InputManager.MouseInput().x
+                (transform.forward * CustomInput.MouseInput().y 
+                + transform.right * CustomInput.MouseInput().x
                 ) * Time.deltaTime * _moveSpeed;
 
             direction = Quaternion.AngleAxis(-transform.localEulerAngles.x, transform.right) * direction;

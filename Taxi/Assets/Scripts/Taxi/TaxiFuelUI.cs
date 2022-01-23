@@ -13,6 +13,39 @@ public class TaxiFuelUI : MonoBehaviour, IClickable
     [SerializeField] private Image _fillImage;
 
     private Taxi _taxi;
+    
+
+    private void Start()
+    {
+        _taxi = GetComponentInParent<Taxi>();
+
+        HideFuel();
+    }
+
+
+    private float FillAmount() 
+    {
+        float delta = _maxFillAmount - _minFillAmount;
+        float fillAmount = _minFillAmount + delta * _taxi.Tank.FuelPercent();
+        return fillAmount;
+    }
+
+
+    private void ShowFuel() 
+    {
+        _fillImage.enabled = true;
+    }
+
+    private void UpdateFuel()
+    {
+        _fillImage.fillAmount = FillAmount();
+    }
+
+    private void HideFuel() 
+    {
+        _fillImage.enabled = false;
+    }
+
 
     public void OnClick() { }
 
@@ -32,35 +65,5 @@ public class TaxiFuelUI : MonoBehaviour, IClickable
     {
         UpdateFuel();
     }
-
-    private void ShowFuel() 
-    {
-        _fillImage.enabled = true;
-    }
-
-    private void UpdateFuel()
-    {
-        _fillImage.fillAmount = FillAmount();
-    }
-
-    private void HideFuel() 
-    {
-        _fillImage.enabled = false;
-    }
-
-    private float FillAmount() 
-    {
-        float delta = _maxFillAmount - _minFillAmount;
-        float fillAmount = _minFillAmount + delta * _taxi.Tank.FuelPercent();
-        return fillAmount;
-    }
-
-    private void Start()
-    {
-        _taxi = GetComponentInParent<Taxi>();
-
-        HideFuel();
-    }
-
 
 }

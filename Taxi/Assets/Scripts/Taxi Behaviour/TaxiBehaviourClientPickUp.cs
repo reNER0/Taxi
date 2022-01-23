@@ -1,34 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public class TaxiBehaviourClientPickUp : ITaxiBehaviour
 {
     private TaxiBehaviourController _controller;
+
 
     public TaxiBehaviourClientPickUp(TaxiBehaviourController controller)
     {
         _controller = controller;
     }
+
+
     void ITaxiBehaviour.Enter()
     {
-        _controller.taxi.SetDestinationPoint(_controller.taxi._client._startPoint);
+        _controller.Taxi.SetDestinationPoint(_controller.Taxi.Client.startPoint);
     }
 
     void ITaxiBehaviour.Exit()
     {
-        _controller.taxi.InitLastPoints();
+        _controller.Taxi.InitLastPoints();
     }
 
     void ITaxiBehaviour.Update()
     {
-        _controller.taxi.Tank.BurnFuel();
-        _controller.taxi.ShowWay();
-        _controller.taxi._client.ShowWay();
+        _controller.Taxi.Tank.BurnFuel();
 
-        if (_controller.taxi.ReachedDestinationPoint()) 
+        _controller.Taxi.PathRenderer.DrawPath(_controller.Taxi.transform.position, _controller.Taxi.currentPoint, _controller.Taxi.destinationPoint, _controller.Taxi.excludePoints);
+
+        _controller.Taxi.Client.PathRenderer.DrawPath(_controller.Taxi.Client.startPoint, _controller.Taxi.Client.destinationPoint);
+
+        if (_controller.Taxi.ReachedDestinationPoint()) 
         {
             _controller.SetBehaviour(_controller.GetBehaviour<TaxiBehaviourClientDelivery>());
         }
     }
+
 }

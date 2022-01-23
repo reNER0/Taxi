@@ -7,6 +7,7 @@ public class Edge
     public Point point1;
     public Point point2;
 
+
     public Edge(Point point1, Point point2)
     {
         this.point1 = point1;

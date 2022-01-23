@@ -11,52 +11,35 @@ public class Taxi : MonoBehaviour, IClickable
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private int _drivenRoadMemory = 3;
     [SerializeField] private Client _clientPrefab;
-
-    public float ClientReward => _clientReward;
-
-    private Point _destination;
-
-    private Point _currentPoint;
-    private List<Point> _lastPoints = new List<Point>(0);
-
-    private TaxiManager _taxiManager;
-    private Map _map;
-
-    private float _lastTime;
-
-    private LineRenderer _renderer;
-
-    public Client _client { get; private set; }
-
     [SerializeField] private TaxiFuelTank _tank = new TaxiFuelTank();
 
-    public TaxiFuelTank Tank => _tank;
+    private Point _currentPoint;
+    private Point _destinationPoint;
+    private List<Point> _lastPoints = new List<Point>(0);
+    private float _lastTime;
+    private Client _client;
+    private PathRenderer _pathRenderer;
 
-    public void InitLastPoints() 
-    {
-        _lastPoints = new List<Point>();
-        while (_lastPoints.Count < _drivenRoadMemory)
-        {
-            _lastPoints.Add(_currentPoint);
-        }
-    }
+    public float clientReward => _clientReward;
+    public Point currentPoint => _currentPoint;
+    public Point destinationPoint => _destinationPoint;
+    public List<Point> excludePoints => _lastPoints;
+    public Client Client => _client;
+    public TaxiFuelTank Tank => _tank;
+    public PathRenderer PathRenderer => _pathRenderer;
+
 
     private void Start()
     {
-        _taxiManager = GetComponentInParent<TaxiManager>();
+        _pathRenderer = GetComponent<PathRenderer>();
 
-        _map = FindObjectOfType<Map>();
+        _currentPoint = Map.Instance.GetClosestPoint(transform.position);
 
-        _currentPoint = _map.GetClosestPoint(transform.position);
-
-        _destination = _currentPoint;
+        _destinationPoint = _currentPoint;
 
         InitLastPoints();
 
         _lastTime = Time.time;
-
-        _renderer = GetComponent<LineRenderer>();
-        _renderer.enabled = false;
     }
 
     private void Update()
@@ -69,7 +52,7 @@ public class Taxi : MonoBehaviour, IClickable
                 _lastPoints.RemoveAt(0);
 
                 bool crossedDrivenRoad;
-                _currentPoint = _map.GetNextPoint(_currentPoint.position, _destination.position, _lastPoints, out crossedDrivenRoad);
+                _currentPoint = Map.Instance.GetNextPoint(_currentPoint.position, _destinationPoint.position, _lastPoints, out crossedDrivenRoad);
                 if (crossedDrivenRoad)
                     InitLastPoints();
             }
@@ -79,30 +62,31 @@ public class Taxi : MonoBehaviour, IClickable
                 transform.position = Vector3.MoveTowards(transform.position, _currentPoint.position, _speed * Time.deltaTime * (1 - Traffic.GetTrafficAtPoint(transform.position)));
             }
         }
-
     }
 
-    public void ShowWay() 
-    {
-        Vector3[] positions = _map.GetShortestPath(transform.position, _currentPoint.position, _destination.position, _lastPoints);
-        _renderer.positionCount = positions.Length;
-        _renderer.SetPositions(positions);
-
-        _renderer.enabled = true;
-    }
-
-    public void HideWay() 
-    {
-        _renderer.enabled = false;
-    }
 
     public bool ReachedNextPoint() => transform.position == _currentPoint.position;
 
-    public bool ReachedDestinationPoint() => transform.position == _destination.position;
+    public bool ReachedDestinationPoint() => transform.position == _destinationPoint.position;
+
+
+    public void InitLastPoints() 
+    {
+        _lastPoints = new List<Point>();
+        while (_lastPoints.Count < _drivenRoadMemory)
+        {
+            _lastPoints.Add(_currentPoint);
+        }
+    }
 
     public void SetDestinationPoint(Point point) 
     {
-        _destination = _map.GetClosestPoint(point.position);
+        _destinationPoint = Map.Instance.GetClosestPoint(point.position);
+    }
+
+    public void PickupClient(Client client) 
+    {
+        _client = client;
     }
 
 
@@ -115,14 +99,15 @@ public class Taxi : MonoBehaviour, IClickable
         Stats.Instance.SetLastTime(time);
     }
 
-    void IClickable.OnOverlayEnter() { }
+    public void OnOverlayEnter() { }
 
-    void IClickable.OnOverlayExit() { }
+    public void OnOverlayExit() { }
 
-    void IClickable.OnOverlayStay() { }
+    public void OnOverlayStay() { }
 
     public void OnClick()
     {
-        _client = _taxiManager.PickUpClient();
+        SelectionController.Instance.SelectTaxi(this);
     }
+
 }

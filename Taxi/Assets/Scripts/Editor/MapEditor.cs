@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -11,6 +9,7 @@ public class MapEditor : Editor
     private Event _event;
     private Map _targetComponent;
     private int _selection = -1; // -1 if no selection
+
 
     private void OnSceneGUI() 
     {
@@ -136,6 +135,7 @@ public class MapEditor : Editor
         }
     }
 
+
     private Vector3 GetMousePosition() 
     {
         Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -149,6 +149,7 @@ public class MapEditor : Editor
             throw new Exception("Can`t get mouse position. Make sure if there are colliders on scene!");
         }
     }
+
 
     private bool AddButtonPressed()
     {

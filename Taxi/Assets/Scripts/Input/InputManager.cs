@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 
     private List<IClickable> _lastClickablesList = new List<IClickable>();
 
+
     private void Start()
     {
         _camera = Camera.main;
@@ -36,7 +37,7 @@ public class InputManager : MonoBehaviour
                 click.OnOverlayStay();
             }
 
-            if (isClicked())
+            if (CustomInput.isClicked())
             {
                 click.OnClick();
             }
@@ -53,19 +54,4 @@ public class InputManager : MonoBehaviour
         }
     }
 
-
-    public static Vector2 MouseInput()
-    {
-        return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-    }
-
-    public static bool isMoveButtonPressed()
-    {
-        return Input.GetMouseButton(1);
-    }
-
-    public static bool isClicked()
-    {
-        return Input.GetMouseButtonDown(0);
-    }
 }
