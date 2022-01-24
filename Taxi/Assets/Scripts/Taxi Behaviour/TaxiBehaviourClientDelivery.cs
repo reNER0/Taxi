@@ -13,7 +13,7 @@ public class TaxiBehaviourClientDelivery : ITaxiBehaviour
 
     void ITaxiBehaviour.Enter()
     {
-        _controller.Taxi.SetDestinationPoint(_controller.Taxi.Client.destinationPoint);
+        _controller.Taxi.SetDestinationPoint(_controller.Taxi.Client.DestinationPoint);
 
         _controller.Taxi.Client.transform.parent = _controller.transform;
     }
@@ -34,7 +34,7 @@ public class TaxiBehaviourClientDelivery : ITaxiBehaviour
 
         _controller.Taxi.PathRenderer.DrawPath(_controller.Taxi.transform.position, _controller.Taxi.currentPoint, _controller.Taxi.destinationPoint, _controller.Taxi.excludePoints);
 
-        _controller.Taxi.Client.PathRenderer.DrawPath(_controller.Taxi.Client.startPoint, _controller.Taxi.Client.destinationPoint);
+        _controller.Taxi.Client.PathRenderer.DrawPath(_controller.Taxi.Client.StartPoint, _controller.Taxi.Client.DestinationPoint);
 
         if (_controller.Taxi.ReachedDestinationPoint())
         {

@@ -19,33 +19,33 @@ public class PathRenderer : MonoBehaviour
 
     public void DrawPath(Point nearestPoint, Point destinationPoint)
     {
-        Vector3[] positions = new Vector3[] { nearestPoint.position, destinationPoint.position };
+        Vector3[] positions = new Vector3[] { nearestPoint.Position, destinationPoint.Position };
         _renderer.positionCount = positions.Length;
         _renderer.SetPositions(positions);
 
-        SetDestinationMarker(destinationPoint.position);
+        SetDestinationMarker(destinationPoint.Position);
 
         ShowPath();
     }
 
     public void DrawPath(Point nearestPoint, Point destinationPoint,List<Point> excludePoints)
     {
-        Vector3[] positions = Map.Instance.GetShortestPath(nearestPoint.position, nearestPoint.position, destinationPoint.position, excludePoints);
+        Vector3[] positions = Map.Instance.GetShortestPath(nearestPoint.Position, nearestPoint.Position, destinationPoint.Position, excludePoints);
         _renderer.positionCount = positions.Length;
         _renderer.SetPositions(positions);
 
-        SetDestinationMarker(destinationPoint.position);
+        SetDestinationMarker(destinationPoint.Position);
 
         ShowPath();
     }
 
     public void DrawPath(Vector3 position, Point nearestPoint, Point destinationPoint, List<Point> excludePoints)
     {
-        Vector3[] positions = Map.Instance.GetShortestPath(position, nearestPoint.position, destinationPoint.position, excludePoints);
+        Vector3[] positions = Map.Instance.GetShortestPath(position, nearestPoint.Position, destinationPoint.Position, excludePoints);
         _renderer.positionCount = positions.Length;
         _renderer.SetPositions(positions);
 
-        SetDestinationMarker(destinationPoint.position);
+        SetDestinationMarker(destinationPoint.Position);
 
         ShowPath();
     }

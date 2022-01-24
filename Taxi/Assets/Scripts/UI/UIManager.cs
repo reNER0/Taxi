@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private MoneyManager _moneyManager;
-    [SerializeField] private TaxiManager _taxiManager;
+    [SerializeField] private TaxiSpawner _taxiManager;
 
     [SerializeField] private Text _moneyText;
     [SerializeField] private Button _buyTaxiButton;
@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void OnMoneyValueChanged(int money) 
     {
-        _buyTaxiButton.interactable = money >= _taxiManager.taxiCost;
+        _buyTaxiButton.interactable = money >= _taxiManager.TaxiCost;
 
         _moneyText.text = money + "$";
     }

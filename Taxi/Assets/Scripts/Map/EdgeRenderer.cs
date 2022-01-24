@@ -16,7 +16,7 @@ public class EdgeRenderer : MonoBehaviour
 
     private void Update()
     {
-        SetTrafficInfo(Traffic.GetTrafficAtPoint(_edge.point1.position), Traffic.GetTrafficAtPoint(_edge.point2.position));
+        SetTrafficInfo(Traffic.GetTrafficAtPoint(_edge.Point1.Position), Traffic.GetTrafficAtPoint(_edge.Point2.Position));
     }
 
 
@@ -24,8 +24,8 @@ public class EdgeRenderer : MonoBehaviour
     {
         _edge = edge;
 
-        _renderer.SetPosition(0, _edge.point1.position);
-        _renderer.SetPosition(1, _edge.point2.position);
+        _renderer.SetPosition(0, _edge.Point1.Position);
+        _renderer.SetPosition(1, _edge.Point2.Position);
     }
 
     public void SetTrafficInfo(float traffic1, float traffic2)

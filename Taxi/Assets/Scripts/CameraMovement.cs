@@ -20,7 +20,7 @@ public class CameraMovement : MonoBehaviour
 
     private void MoveCamera()
     {
-        if (CustomInput.isMoveButtonPressed())
+        if (CustomInput.IsMoveButtonPressed())
         {
             Vector3 direction = 
                 (transform.forward * CustomInput.MouseInput().y 

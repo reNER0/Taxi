@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
                 click.OnOverlayStay();
             }
 
-            if (CustomInput.isClicked())
+            if (CustomInput.IsClicked())
             {
                 click.OnClick();
             }

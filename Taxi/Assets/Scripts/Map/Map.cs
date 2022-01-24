@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum EditType 
+public enum EditTypes
 {
     ExtrudingPoints,
     MovingPoints,
@@ -15,12 +15,12 @@ public class Map : MonoBehaviour
 {
     [SerializeField] private PointRenderer _pointPrefab;
     [SerializeField] private EdgeRenderer _edgePrefab;
-    [SerializeField] private EditType _editType;
+    [SerializeField] private EditTypes _editType;
 
-    [HideInInspector] public List<Point> points = new List<Point>(0);
-    [HideInInspector] public List<Edge> edges = new List<Edge>(0);
+    public List<Point> Points = new List<Point>(0);
+    public List<Edge> Edges = new List<Edge>(0);
 
-    public EditType editType => _editType;
+    public EditTypes EditType => _editType;
     public static Map Instance;
 
 
@@ -33,19 +33,19 @@ public class Map : MonoBehaviour
     }
 
 
-    public Point GetClosestPoint(Vector3 pos) 
+    public Point GetClosestPoint(Vector3 pos)
     {
-        Point closestPoint = points[0];
+        Point closestPoint = Points[0];
 
-        float minDist = Vector3.Distance(pos, closestPoint.position);
+        float minDist = Vector3.Distance(pos, closestPoint.Position);
 
-        for (int i = 1; i < points.Count; i++) 
+        for (int i = 1; i < Points.Count; i++)
         {
-            float dist = Vector3.Distance(pos, points[i].position);
-            if (dist < minDist) 
+            float dist = Vector3.Distance(pos, Points[i].Position);
+            if (dist < minDist)
             {
                 minDist = dist;
-                closestPoint = points[i];
+                closestPoint = Points[i];
             }
         }
 
@@ -60,9 +60,9 @@ public class Map : MonoBehaviour
 
         List<Edge> currentEdges = new List<Edge>(0);
 
-        foreach (Edge edge in edges)
+        foreach (Edge edge in Edges)
         {
-            if (edge.point1.position == startPoint.position || edge.point2.position == startPoint.position)
+            if (edge.Point1.Position == startPoint.Position || edge.Point2.Position == startPoint.Position)
             {
                 currentEdges.Add(edge);
             }
@@ -72,13 +72,13 @@ public class Map : MonoBehaviour
 
         foreach (Edge edge in currentEdges)
         {
-            if (edge.point1.position == startPoint.position)
+            if (edge.Point1.Position == startPoint.Position)
             {
-                nextPoints.Add(edge.point2);
+                nextPoints.Add(edge.Point2);
             }
             else
             {
-                nextPoints.Add(edge.point1);
+                nextPoints.Add(edge.Point1);
             }
         }
 
@@ -88,8 +88,8 @@ public class Map : MonoBehaviour
 
         for (int i = 0; i < currentEdges.Count; i++)
         {
-            float value = currentEdges[i].Lenght()* (1 + currentEdges[i].EdgeTraffic()/2) + Vector3.Distance(nextPoints[i].position, destinationPoint.position);
-            if (value < minValue && !CheckIfListContainsPoint(nextPoints[i], excludePoints))
+            float value = currentEdges[i].Lenght() * (1 + currentEdges[i].EdgeTraffic() / 2) + Vector3.Distance(nextPoints[i].Position, destinationPoint.Position);
+            if (value < minValue && !CheckIfListContainsPoints(nextPoints[i], excludePoints))
             {
                 minValue = value;
                 nextPoint = nextPoints[i];
@@ -99,7 +99,8 @@ public class Map : MonoBehaviour
 
         crossExcluded = false;
 
-        if (nextPoint == null)   //if nowhere to run returning starting point and warn about crossing
+        //if nowhere to run returning starting point and warn about crossing
+        if (nextPoint == null)
         {
             crossExcluded = true;
             return startPoint;
@@ -108,35 +109,30 @@ public class Map : MonoBehaviour
 
         return nextPoint;
     }
-    
+
     public Vector3[] GetShortestPath(Vector3 fromPosition, Vector3 fromPoint, Vector3 destination, List<Point> excludePoints)
     {
         Point lastPoint = GetClosestPoint(fromPoint);
 
-        List<Point> excludeP = new List<Point>();
-
-        for (int i = 0; i < excludePoints.Count; i++) 
-        {
-            excludeP.Add(excludePoints[i]);
-        }
+        List<Point> excludeP = new List<Point>(excludePoints);
 
         List<Vector3> path = new List<Vector3>();
 
         path.Add(fromPosition);
         path.Add(fromPoint);
 
-        if (lastPoint.position != destination)
+        if (lastPoint.Position != destination)
         {
             for (int i = 0; i < 50; i++)
             {
                 excludeP.Add(lastPoint);
-                
+
                 excludeP.RemoveAt(0);
 
                 bool updateData;
-                Point nextPoint = GetNextPoint(lastPoint.position, destination, excludeP, out updateData);
+                Point nextPoint = GetNextPoint(lastPoint.Position, destination, excludeP, out updateData);
 
-                if (updateData) 
+                if (updateData)
                 {
                     excludeP = new List<Point>();
 
@@ -146,9 +142,9 @@ public class Map : MonoBehaviour
                     }
                 }
 
-                path.Add(nextPoint.position);
+                path.Add(nextPoint.Position);
 
-                if (nextPoint.position == destination)
+                if (nextPoint.Position == destination)
                 {
                     break;
                 }
@@ -161,11 +157,11 @@ public class Map : MonoBehaviour
         return path.ToArray();
     }
 
-    public bool CheckIfListContainsPoint(Point point, List<Point> points) 
+    public bool CheckIfListContainsPoints(Point point, List<Point> points)
     {
-        foreach (Point p in points) 
+        foreach (Point p in points)
         {
-            if (p.position == point.position) 
+            if (p.Position == point.Position)
             {
                 return true;
             }
@@ -174,78 +170,83 @@ public class Map : MonoBehaviour
         return false;
     }
 
+    public bool CheckIfEdgeContainsPoint(Edge edge, Point point)
+    {
+        bool pointEqualEdgesPoint1 = edge.Point1.Position == point.Position;
+        bool pointEqualEdgesPoint2 = edge.Point2.Position == point.Position;
+
+        return (pointEqualEdgesPoint1 || pointEqualEdgesPoint2);
+    }
+
+    public bool CheckIfEdgeContainsPoints(Edge edge, Point point1, Point point2)
+    {
+        bool edgeContainsPoint1 = CheckIfEdgeContainsPoint(edge, point1);
+        bool edgeContainsPoint2 = CheckIfEdgeContainsPoint(edge, point2);
+
+        return (edgeContainsPoint1 && edgeContainsPoint2);
+    }
+
 
     public void AddPoint(Vector3 pos)
     {
         Point newPoint = new Point(pos);
-        points.Add(newPoint);
+        Points.Add(newPoint);
     }
 
-    public void AddEdge(Point point1, Point point2) 
+    public void AddEdge(Point point1, Point point2)
     {
-        foreach (Edge edge in edges) 
+        foreach (Edge edge in Edges)
         {
-            if (
-                (edge.point1 == point1 && edge.point2 == point2)
-                ||
-                (edge.point1 == point2 && edge.point2 == point1)
-                )
+            if (CheckIfEdgeContainsPoints(edge, point1, point2))
             {
                 return;
             }
         }
 
-        edges.Add(new Edge(point1, point2));
+        Edges.Add(new Edge(point1, point2));
     }
 
-    public void RemovePoint(Point point) 
+    public void RemovePoint(Point point)
     {
-        for (int i = 0; i < edges.Count; i++)
+        for (int i = 0; i < Edges.Count; i++)
         {
-            if (new Vector3(Mathf.Round(edges[i].point1.position.x*10)/10, Mathf.Round(edges[i].point1.position.y * 10) / 10, Mathf.Round(edges[i].point1.position.z * 10) / 10) 
-                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10)
-                || new Vector3(Mathf.Round(edges[i].point2.position.x * 10) / 10, Mathf.Round(edges[i].point2.position.y * 10) / 100, Mathf.Round(edges[i].point2.position.z * 10) / 10)
-                == new Vector3(Mathf.Round(point.position.x * 10) / 10, Mathf.Round(point.position.y * 10) / 10, Mathf.Round(point.position.z * 10) / 10))
+            if (CheckIfEdgeContainsPoint(Edges[i], point))
             {
-                edges.RemoveAt(i);
+                Edges.RemoveAt(i);
                 i--;
             }
         }
 
-        points.Remove(point);
+        Points.Remove(point);
     }
 
     public void RemoveEdge(Point point1, Point point2)
     {
-        foreach (Edge edge in edges)
+        foreach (Edge edge in Edges)
         {
-            if (
-                (edge.point1 == point1 && edge.point2 == point2)
-                ||
-                (edge.point1 == point2 && edge.point2 == point1)
-                )
+            if (CheckIfEdgeContainsPoints(edge, point1, point2))
             {
-                edges.Remove(edge);
+                Edges.Remove(edge);
                 break;
             }
         }
     }
 
-    public void DrawEdges() 
+    public void DrawEdges()
     {
-        for(int i = 0; i < edges.Count; i++) 
+        for (int i = 0; i < Edges.Count; i++)
         {
             EdgeRenderer newRenderer = Instantiate(_edgePrefab, transform);
-            newRenderer.AssignEdge(edges[i]);
+            newRenderer.AssignEdge(Edges[i]);
         }
     }
 
     public void DrawPoints()
     {
-        for (int i = 0; i < points.Count; i++)
+        for (int i = 0; i < Points.Count; i++)
         {
             PointRenderer newRenderer = Instantiate(_pointPrefab, transform);
-            newRenderer.AssignPosition(points[i].position);
+            newRenderer.AssignPosition(Points[i].Position);
         }
     }
 

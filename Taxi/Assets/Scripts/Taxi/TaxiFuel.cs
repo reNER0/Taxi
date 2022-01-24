@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -21,6 +19,7 @@ public class TaxiFuelTank
     public void BurnFuel()
     {
         _fuelQuantity -= Time.deltaTime * _fuelBurningSpeed;
+
         if (_fuelQuantity <= 0)
         {
             if (MoneyManager.Instance.CanSpendMoney(_fuelCapacity))

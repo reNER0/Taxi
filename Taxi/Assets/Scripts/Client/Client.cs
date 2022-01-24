@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Client : MonoBehaviour, IClickable
 {
     private PathRenderer _pathRenderer;
 
-    public Point startPoint;
-    public Point destinationPoint;
+    public Point StartPoint;
+    public Point DestinationPoint;
     public PathRenderer PathRenderer => _pathRenderer;
 
 
@@ -17,9 +15,9 @@ public class Client : MonoBehaviour, IClickable
     }
 
 
-    public float GetReward() 
+    public float GetReward()
     {
-        float reward = Vector3.Distance(startPoint.position, destinationPoint.position);
+        float reward = Vector3.Distance(StartPoint.Position, DestinationPoint.Position);
 
         return reward;
     }
@@ -33,12 +31,13 @@ public class Client : MonoBehaviour, IClickable
 
     public void OnOverlayEnter()
     {
-        PathRenderer.DrawPath(startPoint, destinationPoint);
+        PathRenderer.DrawPath(StartPoint, DestinationPoint);
     }
 
     public void OnOverlayExit()
     {
-        if(this)  //Checking if instance exists because of bug when OnOverlayExit called after destroying Client
+        //Checking if instance exists because of bug when OnOverlayExit called after destroying Client
+        if (this)
             PathRenderer.HidePath();
     }
 

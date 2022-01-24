@@ -52,22 +52,22 @@ public class Taxi : MonoBehaviour, IClickable
                 _lastPoints.RemoveAt(0);
 
                 bool crossedDrivenRoad;
-                _currentPoint = Map.Instance.GetNextPoint(_currentPoint.position, _destinationPoint.position, _lastPoints, out crossedDrivenRoad);
+                _currentPoint = Map.Instance.GetNextPoint(_currentPoint.Position, _destinationPoint.Position, _lastPoints, out crossedDrivenRoad);
                 if (crossedDrivenRoad)
                     InitLastPoints();
             }
             else 
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_currentPoint.position - transform.position), _rotationSpeed * Time.deltaTime);
-                transform.position = Vector3.MoveTowards(transform.position, _currentPoint.position, _speed * Time.deltaTime * (1 - Traffic.GetTrafficAtPoint(transform.position)));
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_currentPoint.Position - transform.position), _rotationSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _currentPoint.Position, _speed * Time.deltaTime * (1 - Traffic.GetTrafficAtPoint(transform.position)));
             }
         }
     }
 
 
-    public bool ReachedNextPoint() => transform.position == _currentPoint.position;
+    public bool ReachedNextPoint() => transform.position == _currentPoint.Position;
 
-    public bool ReachedDestinationPoint() => transform.position == _destinationPoint.position;
+    public bool ReachedDestinationPoint() => transform.position == _destinationPoint.Position;
 
 
     public void InitLastPoints() 
@@ -81,7 +81,7 @@ public class Taxi : MonoBehaviour, IClickable
 
     public void SetDestinationPoint(Point point) 
     {
-        _destinationPoint = Map.Instance.GetClosestPoint(point.position);
+        _destinationPoint = Map.Instance.GetClosestPoint(point.Position);
     }
 
     public void PickupClient(Client client) 
@@ -96,7 +96,7 @@ public class Taxi : MonoBehaviour, IClickable
 
         float time = Time.time - _lastTime;
 
-        Stats.Instance.SetLastTime(time);
+        DeliveryTimeStats.Instance.SetLastTime(time);
     }
 
     public void OnOverlayEnter() { }

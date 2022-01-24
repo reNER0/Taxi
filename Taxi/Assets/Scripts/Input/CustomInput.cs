@@ -9,12 +9,12 @@ public class CustomInput : MonoBehaviour
         return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
-    public static bool isMoveButtonPressed()
+    public static bool IsMoveButtonPressed()
     {
         return Input.GetMouseButton(1);
     }
 
-    public static bool isClicked()
+    public static bool IsClicked()
     {
         return Input.GetMouseButtonDown(0);
     }
